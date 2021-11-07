@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btCalc;
     EditText oper1, oper2;
-    TextView tvRes;
+    TextView tvRes, erroLabel;
     int operacao=0; //Somar
 
     @Override
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Acessando os componentes
         tvRes= (TextView) findViewById(R.id.tV_res);
+        erroLabel= (TextView) findViewById(R.id.erroLabel);
         oper1= (EditText) findViewById(R.id.edT_oper1);
         oper2= (EditText) findViewById(R.id.edT_oper2);
         btCalc= (Button) findViewById(R.id.button);
@@ -56,10 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if(view==btCalc){ //Gerenciando o evento onClick do Botão Calcular
 
+            if(oper1.getText().toString().equals("") || oper2.getText().toString().equals("")){
+                erroLabel.setText("Um dos campos está vazio, operação não concluída...");
+                return;
+            } else {
+                erroLabel.setText("");
+            }
+
             double numOper1 = Double.parseDouble(oper1.getText().toString());
             double numOper2 = Double.parseDouble(oper2.getText().toString());
             double res=0;
-
 
             switch (operacao){
                 case 0: //Soma
@@ -72,12 +79,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     res= numOper1 * numOper2;
                     break;
                 case 3: //Divisão
+                    if(numOper2 == 0){
+                        erroLabel.setText("Divisão por zero, resultado indefinido...");
+                        break;
+                    }
                     res=numOper1/numOper2;
                     break;
 
             }
             tvRes.setText(""+res);
-
         }
     }
 
